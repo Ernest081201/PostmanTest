@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "69e6bd86-c928-43ad-bae8-f2622cb631ee",
+		"name": "Lavka",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41098498"
+	},
+	"item": [
+		{
+			"name": "Oplata",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"order_type\": \"avatar\",\n    \"details\": {\n        \"avatar_id\": \"12\",\n        \"card_number\": \"5469980472408604\",\n        \"card_name\": \"ernest adilkhanyan\",\n        \"card_actual\": \"12/26\",\n        \"card_cvv\": \"125\",\n        \"secure_code\": \"56456\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{lavka_host}}/payments",
+					"host": [
+						"{{lavka_host}}"
+					],
+					"path": [
+						"payments"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "lavka_host",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

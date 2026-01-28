@@ -1,0 +1,436 @@
+{
+	"info": {
+		"_postman_id": "a04944f7-adef-4661-9f99-44e719dc80ff",
+		"name": "Pokemon",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41098498"
+	},
+	"item": [
+		{
+			"name": "Создание покемона",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"pokemon_id\", jsonData.id);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Requestbody",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"{{$randomFirstName}}\",\n  \"photo_id\": -1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/{{api_version}}/pokemons",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{api_version}}",
+						"pokemons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Создание покемона без name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 422\", function () {",
+							"    pm.response.to.have.status(422);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Requestbody",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \n  \"photo_id\": -1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/{{api_version}}/pokemons",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{api_version}}",
+						"pokemons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Поймать в покебол",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "trainer_token",
+						"value": "389eaa95aa866370922c874940ab722b",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"pokemon_id\": \"{{pokemon_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.pokemonbattle.ru/v2/trainers/add_pokeball",
+					"protocol": "https",
+					"host": [
+						"api",
+						"pokemonbattle",
+						"ru"
+					],
+					"path": [
+						"v2",
+						"trainers",
+						"add_pokeball"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Битва",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest(\"https://api.pokemonbattle.ru/v2/pokemons?in_pokeball=1\", function (err, response) {",
+							"var jsonData = response.json(); // сохраним весь ответ от бекенда в переменную jsonData",
+							"",
+							"pm.collectionVariables.set(\"enemy_id\", jsonData.data[3].id);  // сохраним id противника в переменные",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "trainer_token",
+						"value": "389eaa95aa866370922c874940ab722b",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"attacking_pokemon\": \"{{pokemon_id}}\",\n\n    \"defending_pokemon\": \"{{enemy_id}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.pokemonbattle.ru/v2/battle",
+					"protocol": "https",
+					"host": [
+						"api",
+						"pokemonbattle",
+						"ru"
+					],
+					"path": [
+						"v2",
+						"battle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Список покемонов",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{host}}/{{api_version}}/pokemons?in_pokeball=1&attack=3",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{api_version}}",
+						"pokemons"
+					],
+					"query": [
+						{
+							"key": "trainer_id",
+							"value": "46801",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "in_pokeball",
+							"value": "1"
+						},
+						{
+							"key": "pokemon_id",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "attack",
+							"value": "3"
+						},
+						{
+							"key": "name",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "stage",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Нокаут себя",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "trainer_token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n    \"pokemon_id\": \"529936\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/{{api_version}}/pokemons/knockout",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{api_version}}",
+						"pokemons",
+						"knockout"
+					],
+					"query": [
+						{
+							"key": "trainer_id",
+							"value": "46801",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "https://api.pokemonbattle.ru"
+		},
+		{
+			"key": "api_version",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "pokemon_id",
+			"value": ""
+		},
+		{
+			"key": "enemy_id",
+			"value": ""
+		},
+		{
+			"key": "jsonData",
+			"value": "",
+			"disabled": true
+		}
+	]
+}
